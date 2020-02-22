@@ -13,6 +13,7 @@ public class EnterpriseInfo {
   private double lat;
   private String contactName;
   private String tel;
+  private String emailAdrress;
   private String industry;
   private String entType;
   private String staffAmount;
@@ -121,6 +122,13 @@ public class EnterpriseInfo {
     this.tel = tel;
   }
 
+  public String getEmailAdrress() {
+    return emailAdrress;
+  }
+
+  public void setEmailAdrress(String emailAdrress) {
+    this.emailAdrress = emailAdrress;
+  }
 
   public String getIndustry() {
     return industry;

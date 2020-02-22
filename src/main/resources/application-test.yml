@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: sitidev
     password: Cloud@002
-    url: jdbc:mysql://47.100.200.255:3306/sarikindnessplat_dev?useUnicode=true&characterEncoding=utf8&useSSL=true&allowMultiQueries=true
+    url: jdbc:mysql://47.100.200.255:3306/recruit_release?useUnicode=true&characterEncoding=utf8&useSSL=true&allowMultiQueries=true
 
 
 filePath:

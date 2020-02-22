@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.siti.config.EasyCache;
 import com.siti.enterprise.mapper.*;
 import com.siti.enterprise.po.EnterpriseInfo;
+import com.siti.utils.GetLatAndLngByGaode;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
@@ -39,7 +40,16 @@ public class EnterpriseBiz {
     }
 
     public int insert(EnterpriseInfo enterpriseInfo) {
-
+        // 地址转换高德经纬度坐标
+        try {
+            Map<String, Double> lngLat = GetLatAndLngByGaode.getLngAndLat(enterpriseInfo.getEntAddress(), "b413b3183893f11ebc39ed32450112ae");
+            if (!lngLat.isEmpty()) {
+                enterpriseInfo.setLng(lngLat.get("lng"));
+                enterpriseInfo.setLat(lngLat.get("lat"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<EnterpriseInfo> list =enterpriseMapper.getEnterprise(enterpriseInfo.getEntName());
             return enterpriseMapper.insert(enterpriseInfo);
     }

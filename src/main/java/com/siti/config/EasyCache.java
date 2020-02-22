@@ -1,6 +1,8 @@
 package com.siti.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
+
+import com.siti.common.ConstantYmlValue;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
@@ -8,16 +10,20 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
  * Created by DC on 2019/12/10 - 17:21- {TIME}.
  **/
+@Component
 public class EasyCache<K, V, T, R> {
 
     private static Logger logger = LoggerFactory.getLogger(EasyCache.class);
@@ -28,26 +34,40 @@ public class EasyCache<K, V, T, R> {
 
     public static RedissonClient redisson;
 
-    private EasyCache() {
+    public ReentrantLock reentrantLock=new ReentrantLock();
+
+    @Resource
+    ConstantYmlValue constantYmlValue;
+
+    public void init(){
+        reentrantLock.lock();
+        try{
+            if(initCaffine==null){
+                initCaffine = InitCaffine.getInstance(constantYmlValue.getCaffineDuration(), TimeUnit.SECONDS, 5000);
+                logger.info("init caffine...");
+            }
+            if(redisson==null){
+                Config config = new Config();
+                config.useSingleServer()
+                        .setAddress(constantYmlValue.getRedisAddr())
+                        .setPassword(constantYmlValue.getRedisPassword());
+                //初始化内存缓存
+                redisson = Redisson.create(config);
+                logger.info("init redisson...");
+            }
+        }catch (Exception e){
+            logger.error("init cache error");
+        }finally {
+            reentrantLock.unlock();
+        }
+
     }
 
-    static {
-        //初始化进程内缓存
-        initCaffine = InitCaffine.getInstance(1, TimeUnit.MINUTES, 1000);
-        //创建配置
-        Config config = new Config();
-        config.useSingleServer()
-                .setAddress("redis://127.0.0.1:6379")
-                .setPassword("sharebike@siti");
-        //初始化内存缓存
-        redisson = Redisson.create(config);
+    public EasyCache(){
+
     }
 
-    public static EasyCache build() {
-        return new EasyCache();
-    }
-
-   /* *//**
+    /* *//**
      * 集群配置
      *//*
     private void initClusterCache() {
@@ -117,7 +137,7 @@ public class EasyCache<K, V, T, R> {
                     return;
                 }
                 RBucket bucket = redisson.getBucket(key.toString());
-                bucket.expire(300 + new Random().nextInt(30), TimeUnit.SECONDS);
+                bucket.expire(60 + new Random().nextInt(30), TimeUnit.SECONDS);
                 bucket.set(value);
             } catch (InterruptedException e) {
                 logger.error(e.getMessage());
@@ -162,9 +182,9 @@ public class EasyCache<K, V, T, R> {
             long expiretime;
             if (Objects.isNull(ret1)) {
                 ret1 = (R) NIL;
-                expiretime = 65;
+                expiretime = 60;
             } else {
-                expiretime = 300 + new Random().nextInt(30);
+                expiretime = 60 + new Random().nextInt(30);
             }
             initCaffine.put(key, ret1);
             RBucket bucket = redisson.getBucket(key.toString());
@@ -200,7 +220,7 @@ public class EasyCache<K, V, T, R> {
             if (!Objects.isNull(ret1)) {
                 return ret1;
             }
-            if (!lock.tryLock(1, 15, TimeUnit.SECONDS)) {
+            if (!lock.tryLock(1, 5, TimeUnit.SECONDS)) {
                 ret1 = (R) NIL;
                 return ret1;
             }
@@ -211,9 +231,9 @@ public class EasyCache<K, V, T, R> {
             long expiretime;
             if (Objects.isNull(ret1)) {
                 ret1 = (R) NIL;
-                expiretime = 65;
+                expiretime = 60;
             } else {
-                expiretime = 300 + new Random().nextInt(30);
+                expiretime = 90 + new Random().nextInt(30);
             }
             initCaffine.put(key, ret1);
             RBucket bucket = redisson.getBucket(key.toString());

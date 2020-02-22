@@ -1,7 +1,5 @@
 package com.siti.enterprise.mapper;
 
-
-import com.github.pagehelper.PageInfo;
 import com.siti.enterprise.po.EnterpriseInfo;
 import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
