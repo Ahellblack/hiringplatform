@@ -1,0 +1,23 @@
+server:
+  port: 19999
+  context-path: /hiringplatform
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+    http:
+      multipart:  # 文件上传
+        enabled: true
+        max-file-size: 50MB #单个数据大小总数据大小
+        max-request-size: 100MB #
+  profiles:
+#     active: dev   #  开发环境
+     active: test   #  测试环境
+#    active: prod  #  生产环境
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+json:
+  class-type: Jackson
+version:
+  pcversion: "V1.0" # 大版本号
+  build: 0010 # 小版本号

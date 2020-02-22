@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/sarikindnessplat?useUnicode=true&characterEncoding=utf8&useSSL=true&allowMultiQueries=true
+
+filePath:
+  invalidFileDelete: 0    # 无效文件立即删除
+  images: C:/test/images/    # 文件服务器地址
+  files: C:/test/files/    # 文件服务器地址
+
+#  uploadFiles: C:/bikeFile/uploadFile/ #导入文件存放地址
+
+logback:
+  logHome: c:/audit/log/
+  logName: hiringplatform

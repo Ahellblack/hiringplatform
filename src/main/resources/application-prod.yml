@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: sitidev
+    password: Cloud@002
+    url: jdbc:mysql://119.3.10.184:3306/sarikindnessplat?useUnicode=true&characterEncoding=utf8&useSSL=true&allowMultiQueries=true
+
+
+filePath:
+  invalidFileDelete: 0    # 无效文件立即删除
+  images: C:/test/images/    # 文件服务器地址
+  files: C:/test/files/    # 文件服务器地址
+#  uploadFiles: C:/bikeFile/uploadFile/ #导入文件存放地址
+
+logback:
+  logHome: c:/audit/log/
+  logName: hiringplatform
+
+redis:
+  addr: redis://192.168.1.77:6379
+  password: Cloud@002
