@@ -16,7 +16,7 @@ public class PositionRelease {
   private String workHour;
   private String workShift;
   private String socialBenefit;
-  private long workExperience;
+  private String workExperience;
   private String contactPpl;
   private String contactTel;
   private String remark;
@@ -150,15 +150,14 @@ public class PositionRelease {
     this.socialBenefit = socialBenefit;
   }
 
-
-  public long getWorkExperience() {
+  public String getWorkExperience() {
     return workExperience;
   }
 
-  public void setWorkExperience(long workExperience) {
+  public PositionRelease setWorkExperience(String workExperience) {
     this.workExperience = workExperience;
+    return this;
   }
-
 
   public String getContactPpl() {
     return contactPpl;

@@ -53,9 +53,9 @@ public class EnterpriseController {
     @PostMapping("insert")
     public ReturnResult insert(@RequestBody EnterpriseInfo enterpriseInfo) {
         try {
-            int flag = enterpriseBiz.insert(enterpriseInfo);
+            EnterpriseInfo enterprise = enterpriseBiz.insert(enterpriseInfo);
             User user = new User();
-            if (flag == 1) { // 新增user信息
+            if (enterprise != null) { // 新增user信息
                 user.setUserName(enterpriseInfo.getEntName());
                 user.setRealName(enterpriseInfo.getContactName());
                 user.setRoleCode("manage");
@@ -68,7 +68,7 @@ public class EnterpriseController {
                     logger.info(e.getMessage());
                 }
                 return new ReturnResult(1, "添加成功");
-            } else if (flag == 2) { // 修改user信息
+            } else if (enterprise == null) { // 修改user信息
                 try {
                     userBiz.saveUser("UPDATE", user);
                 } catch (Exception e) {

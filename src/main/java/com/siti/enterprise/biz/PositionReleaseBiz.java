@@ -54,7 +54,7 @@ public class PositionReleaseBiz {
     }
 
 
-    public PageInfo<PositionRelease> getPositionRelease(Integer page, Integer pageSize, Integer entId, Integer postId, String benefit, Integer salary) {
+    public PageInfo<PositionRelease> getPositionRelease(Integer page, Integer pageSize, Integer entId, Integer postId, String benefit, Integer salary,String city) {
         PageHelper.startPage(page, pageSize);
        /* List<PositionRelease> enterprise = new ArrayList<>();
         enterprise = (List<PositionRelease>) easyCache
@@ -111,7 +111,7 @@ public class PositionReleaseBiz {
             benefits = null;
         }
 
-        List<PositionRelease> enterprise = positionReleaseMapper.getPosition(entId, postId, benefits, minSalary, maxSalary);
+        List<PositionRelease> enterprise = positionReleaseMapper.getPosition(entId, postId, benefits, minSalary, maxSalary,city);
         return new PageInfo<>(enterprise);
     }
 

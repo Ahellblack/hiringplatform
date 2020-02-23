@@ -50,7 +50,7 @@ public class EnterpriseBiz {
      *
      * @param enterpriseInfo
      */
-    public int insert(EnterpriseInfo enterpriseInfo) {
+    public EnterpriseInfo insert(EnterpriseInfo enterpriseInfo) {
         EnterpriseInfo info = enterpriseMapper.getEnterpriseByKey(enterpriseInfo.getEntFullname(), enterpriseInfo.getTel());
         // 地址转换高德经纬度坐标
         try {
@@ -73,12 +73,14 @@ public class EnterpriseBiz {
                     logger.info(e.getMessage());
                 }
             }
-            return 2;
+            return null;
         } else { // 企业没有录入过信息，新增
             enterpriseInfo.setIsVerify(0);
             // 插入企业信息
-            return enterpriseMapper.insert(enterpriseInfo);
+            enterpriseMapper.insert(enterpriseInfo);
         }
+        EnterpriseInfo enterprise = enterpriseMapper.getEnterpriseByKey(enterpriseInfo.getEntFullname(), enterpriseInfo.getTel());
+        return enterprise;
     }
 
     public int delete(int id) {
