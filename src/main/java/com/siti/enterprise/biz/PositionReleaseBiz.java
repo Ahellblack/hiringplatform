@@ -30,9 +30,9 @@ public class PositionReleaseBiz {
     /**
      * 新增
      */
-    public List<PositionRelease> insertList( List<PositionRelease> info) {
+    public List<PositionRelease> insertList(List<PositionRelease> info) {
         try {
-            if(info.size()!=0 && info!=null) {
+            if (info.size() != 0 && info != null) {
                 for (PositionRelease release : info) {
                     if (release.getEntId() != 0) {
                         positionReleaseMapper.insert(release);
@@ -41,7 +41,7 @@ public class PositionReleaseBiz {
                 return positionReleaseMapper.getPositionRelease((int) info.get(0).getEntId(), null);
             }
             return new ArrayList<>();
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ArrayList<>();
         }
     }
@@ -54,7 +54,7 @@ public class PositionReleaseBiz {
     }
 
 
-    public PageInfo<PositionRelease> getPositionRelease(Integer page, Integer pageSize, Integer entId, Integer postId) {
+    public PageInfo<PositionRelease> getPositionRelease(Integer page, Integer pageSize, Integer entId, Integer postId, String benefit, Integer salary) {
         PageHelper.startPage(page, pageSize);
        /* List<PositionRelease> enterprise = new ArrayList<>();
         enterprise = (List<PositionRelease>) easyCache
@@ -63,8 +63,59 @@ public class PositionReleaseBiz {
                             List<PositionRelease> list = positionReleaseMapper.getPositionRelease(entId, postId);
                             return list;
                         });*/
-        List<PositionRelease> enterprise = positionReleaseMapper.getPositionRelease(entId, postId);
+        Integer maxSalary = null;
+        Integer minSalary = null;
+        if(salary!=null)
+        switch (salary) {
+            case 1:
+                minSalary = 0;
+                maxSalary = 1000;
+                break;
+            case 2:
+                minSalary = 1000;
+                maxSalary = 2000;
+                break;
+            case 3:
+                minSalary = 2000;
+                maxSalary = 3000;
+                break;
+            case 4:
+                minSalary = 3000;
+                maxSalary = 5000;
+                break;
+            case 5:
+                minSalary = 5000;
+                maxSalary = 8000;
+                break;
+            case 6:
+                minSalary = 8000;
+                maxSalary = 12000;
+                break;
+            case 7:
+                minSalary = 12000;
+                maxSalary = 20000;
+                break;
+            case 8:
+                minSalary = 20000;
+                maxSalary = null;
+                break;
+            case 0:
+                minSalary = null;
+                maxSalary = null;
+                break;
+        }
+        String[] benefits;
+        if (benefit != null && benefit != "") {
+            benefits = benefit.split(",");
+        } else {
+            benefits = null;
+        }
+
+        List<PositionRelease> enterprise = positionReleaseMapper.getPosition(entId, postId, benefits, minSalary, maxSalary);
         return new PageInfo<>(enterprise);
     }
 
+    public int update(PositionRelease positionRelease) {
+        return positionReleaseMapper.updateByPrimaryKeySelective(positionRelease);
+    }
 }
