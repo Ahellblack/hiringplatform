@@ -66,18 +66,17 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
                 throw new MyException("用户名被占用");
             }
         } else {
-            if (user == null || user.getId() == null
-                    || user.getRealName() == null || "".equals(user.getRealName())) {
+            if (user == null) {
                 throw new MyException("信息不全");
             }
         }
         user.setPhoneNum(user.getPhoneNum() == null ? "" : user.getPhoneNum());
         user.setEmailAddr(user.getEmailAddr() == null ? "" : user.getEmailAddr());
         user.setStatus(user.getStatus() == null ? 1 : user.getStatus());
-        user.setUpdateBy(LoginCtrl.getLoginUserInfo().getId());
+//        user.setUpdateBy(LoginCtrl.getLoginUserInfo().getId());
         user.setUpdateTime(new Date());
-        Role role = roleMapper.selectByPrimaryKey(user.getRoleId());
-        user.setRoleCode(role.getCode());
+//        Role role = roleMapper.selectByPrimaryKey(user.getRoleId());
+//        user.setRoleCode(role.getCode());
         if ("ADD".equals(operation)) {
             user.setPassword(Md5Utils.encryptString("123456"));
             user.setId(null);

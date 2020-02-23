@@ -29,7 +29,12 @@ public class GeneralUploadBiz {
     @Resource
     private YmlConfig ymlConfig;
 
-    public Map<String, Object> uploadImgs(MultipartFile imgs)  {//单张图片上传
+    /**
+     * 单张图片上传
+     *
+     * @param imgs
+     */
+    public Map<String, Object> uploadImgs(MultipartFile imgs) {//单张图片上传
         Map<String, Object> map = new HashMap<>();
         String uploadPath;
         /*String path = ConstantPath.imagesPath;*/
@@ -129,6 +134,42 @@ public class GeneralUploadBiz {
             map.put("message", e.getLocalizedMessage());
             map.put("status", -1);
         }
+        return map;
+    }
+
+    /**
+     * 文件上传
+     *
+     * @param imgs
+     * @param folderName 文件标识
+     */
+    public Map<String, Object> uploadFiles(MultipartFile imgs, String folderName) {
+        Map<String, Object> map = new HashMap<>();
+        String uploadPath = ConstantPath.imagesPath;
+        /*String path = ConstantPath.imagesPath;*/
+        File folder = new File(uploadPath);
+        if (!folder.exists()) {
+            Boolean isCreate = folder.mkdirs();
+            if (!isCreate) {
+                map.put("status", -1);
+                map.put("data", "文件夹创建出错，请重试！");
+                return map;
+            }
+        }
+        if (imgs == null) {
+            return null;
+        }
+        String newFileName = folderName + "_" + System.currentTimeMillis() + (int) (Math.random() * 900) + 100 + ".jpg";
+        try {
+            imgs.transferTo(new File(uploadPath + newFileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File fromPic = new File(uploadPath + newFileName);
+        /*FileCopy.imgMini(path, uploadPath, newFileName, fromPic);
+        FileCopy.imgSquare(path, uploadPath, newFileName, fromPic);*/
+        map.put("fileName", newFileName);
+        /*map.put("filePath", path + newFileName + ".400x400.jpg");*/
         return map;
     }
 }
