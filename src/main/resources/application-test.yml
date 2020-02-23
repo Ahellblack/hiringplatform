@@ -11,9 +11,11 @@ filePath:
   images: C:/test/images/    # 文件服务器地址
   files: C:/test/files/    # 文件服务器地址
 
-redis:
-  addr: redis://192.168.1.77:6379
-  password: Cloud@002
+
 logback:
   logHome: c:/audit/log/
   logName: hiringplatform
+
+redis:
+  addr: redis://127.0.0.1:6379
+  password: Cloud@002

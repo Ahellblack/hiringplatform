@@ -24,10 +24,10 @@ public class PositionInfoCtrl {
 
     // 一级分类
     @GetMapping("getFirstType")
-    public ReturnResult getFirstType (@RequestParam(name = "firstType", required = false) String firstType) {
+    public ReturnResult getFirstType(@RequestParam(name = "firstType", required = false) String firstType) {
         try {
             List<String> list = positionInfoBiz.getFirstType(firstType);
-            return new ReturnResult(1,"查询成功", list);
+            return new ReturnResult(1, "查询成功", list);
         } catch (Exception e) {
             logger.info(e.getMessage());
             return new ReturnResult(-1, "查询失败");
@@ -36,10 +36,10 @@ public class PositionInfoCtrl {
 
     // 二级分类
     @GetMapping("getSecondType")
-    public ReturnResult getSecondType (String firstType, @RequestParam(name = "secondType", required = false) String secondType) {
+    public ReturnResult getSecondType(String firstType, @RequestParam(name = "secondType", required = false) String secondType) {
         try {
             List<String> list = positionInfoBiz.getSecondType(firstType, secondType);
-            return new ReturnResult(1,"查询成功", list);
+            return new ReturnResult(1, "查询成功", list);
         } catch (Exception e) {
             logger.info(e.getMessage());
             return new ReturnResult(-1, "查询失败");
@@ -48,13 +48,16 @@ public class PositionInfoCtrl {
 
     // 具体岗位列表
     @GetMapping("getJobs")
-    public ReturnResult getPositions (String firstType, String secondType, @RequestParam(name = "position", required = false) String position) {
+    public ReturnResult getPositions(String firstType, String secondType, @RequestParam(name = "position", required = false) String position) {
         try {
             List<Map<String, Object>> list = positionInfoBiz.getPositions(firstType, secondType, position);
-            return new ReturnResult(1,"查询成功", list);
+            return new ReturnResult(1, "查询成功", list);
         } catch (Exception e) {
             logger.info(e.getMessage());
             return new ReturnResult(-1, "查询失败");
         }
     }
+
+
+
 }

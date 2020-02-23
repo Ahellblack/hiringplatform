@@ -44,4 +44,11 @@ public interface PositionInfoMapper extends Mapper<PositionInfo> {
             " ORDER BY CONVERT(post_name USING gbk)", "</script>"})
     List<Map<String, Object>> getPositions(@Param("firstType") String firstType, @Param("secondType") String secondType,
                                            @Param("position") String position);
+
+    @Select("SELECT DISTINCT(second_post_type) FROM position_info")
+    List<String> getSecondPositionList();
+
+    @Select("SELECT DISTINCT(first_post_type) FROM position_info where second_post_type=#{secondType}")
+    List<String> getFirstPositionList(@Param("secondType") String data);
+
 }
