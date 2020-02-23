@@ -202,6 +202,13 @@
 			<version>1.2.44</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.cloopen/java-sms-sdk -->
+		<dependency>
+			<groupId>com.cloopen</groupId>
+			<artifactId>java-sms-sdk</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
