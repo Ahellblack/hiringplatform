@@ -5,6 +5,7 @@ import com.siti.common.ReturnResult;
 import com.siti.enterprise.biz.PositionReleaseBiz;
 import com.siti.enterprise.po.EnterpriseInfo;
 import com.siti.enterprise.po.PositionRelease;
+import com.siti.enterprise.vo.PositionReleaseVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,9 +27,9 @@ public class PositionReleaseCtrl {
      *
      * */
     @GetMapping("getPosition")
-    public ReturnResult getPositionRelease(Integer page, Integer pageSize, Integer entId,Integer postId,String benefit,Integer salary ,String city){
+    public ReturnResult getPositionRelease(Integer page, Integer pageSize, Integer entId,Integer postId,String benefit,Integer salary ,String city,String content ){
         try {
-            PageInfo<PositionRelease> positionRelease = positionReleaseBiz.getPositionRelease(page, pageSize, entId,postId,benefit,salary,city);
+            PageInfo<PositionReleaseVo> positionRelease = positionReleaseBiz.getPositionRelease(page, pageSize, entId,postId,benefit,salary,city,content);
             return new ReturnResult(1,"查询成功",positionRelease);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,8 +80,8 @@ public class PositionReleaseCtrl {
     @PostMapping("insertList")
     public ReturnResult insert(@RequestBody List<PositionRelease> positionReleases){
         try {
-            List<PositionRelease> returnPositions = positionReleaseBiz.insertList(positionReleases);
-            if(returnPositions.size()>1){
+            int flag = positionReleaseBiz.insertList(positionReleases);
+            if(flag>=1){
                 return new ReturnResult(1,"添加成功");
             }else {
                 return new ReturnResult(0,"添加失败");

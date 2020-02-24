@@ -67,7 +67,7 @@ public class EnterpriseController {
                 } catch (Exception e) {
                     logger.info(e.getMessage());
                 }
-                return new ReturnResult(1, "添加成功");
+                return new ReturnResult(1, "添加成功",enterprise);
             } else if (enterprise == null) { // 修改user信息
                 try {
                     userBiz.saveUser("UPDATE", user);

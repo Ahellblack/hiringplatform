@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.siti.config.EasyCache;
 import com.siti.enterprise.mapper.PositionReleaseMapper;
 import com.siti.enterprise.po.PositionRelease;
+import com.siti.enterprise.vo.PositionReleaseVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,19 +31,21 @@ public class PositionReleaseBiz {
     /**
      * 新增
      */
-    public List<PositionRelease> insertList(List<PositionRelease> info) {
+    public int insertList(List<PositionRelease> info) {
         try {
+            int flag = 0;
             if (info.size() != 0 && info != null) {
                 for (PositionRelease release : info) {
                     if (release.getEntId() != 0) {
-                        positionReleaseMapper.insert(release);
+                        int i = positionReleaseMapper.insert(release);
+                        flag =flag+i;
                     }
                 }
-                return positionReleaseMapper.getPositionRelease((int) info.get(0).getEntId(), null);
+                return flag;
             }
-            return new ArrayList<>();
+            return 0;
         } catch (Exception e) {
-            return new ArrayList<>();
+            return 0;
         }
     }
 
@@ -54,7 +57,7 @@ public class PositionReleaseBiz {
     }
 
 
-    public PageInfo<PositionRelease> getPositionRelease(Integer page, Integer pageSize, Integer entId, Integer postId, String benefit, Integer salary,String city) {
+    public PageInfo<PositionReleaseVo> getPositionRelease(Integer page, Integer pageSize, Integer entId, Integer postId, String benefit, Integer salary,String city,String content) {
         PageHelper.startPage(page, pageSize);
        /* List<PositionRelease> enterprise = new ArrayList<>();
         enterprise = (List<PositionRelease>) easyCache
@@ -110,8 +113,18 @@ public class PositionReleaseBiz {
         } else {
             benefits = null;
         }
-
-        List<PositionRelease> enterprise = positionReleaseMapper.getPosition(entId, postId, benefits, minSalary, maxSalary,city);
+        List<PositionReleaseVo> enterprise = positionReleaseMapper.getPosition(entId, postId, benefits, minSalary, maxSalary,city,content);
+        enterprise.forEach(data->{
+            if(data.getMaxSalary()!=0&&data.getMinSalary()!=0) {
+                data.setSalary(data.getMinSalary() + "-" + data.getMaxSalary());
+            }else if(data.getMaxSalary()==0&&data.getMinSalary()!=0){
+                data.setSalary("20000及以上");
+            }else if(data.getMaxSalary()!=0&&data.getMinSalary()==0){
+                data.setSalary("0-1000");
+            }else{
+                data.setSalary("面议");
+            }
+        });
         return new PageInfo<>(enterprise);
     }
 

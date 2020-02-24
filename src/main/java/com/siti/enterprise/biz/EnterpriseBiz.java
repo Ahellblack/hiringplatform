@@ -73,7 +73,8 @@ public class EnterpriseBiz {
                     logger.info(e.getMessage());
                 }
             }
-            return null;
+            EnterpriseInfo enterprise = enterpriseMapper.getEnterpriseByKey(enterpriseInfo.getEntFullname(), enterpriseInfo.getTel());
+            return enterprise;
         } else { // 企业没有录入过信息，新增
             enterpriseInfo.setIsVerify(0);
             // 插入企业信息
