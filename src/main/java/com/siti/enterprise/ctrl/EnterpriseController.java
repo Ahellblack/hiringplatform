@@ -61,7 +61,7 @@ public class EnterpriseController {
                 user.setRoleCode("manage");
                 user.setEmailAddr(enterpriseInfo.getEmailAddress());
                 user.setPhoneNum(enterpriseInfo.getTel());
-                user.setUserType("manage");
+                user.setUserType("manager");
                 user.setStatus(1);
                 try {
                     userBiz.saveUser("ADD", user);
