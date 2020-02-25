@@ -5,6 +5,7 @@ import com.siti.common.ReturnResult;
 import com.siti.enterprise.biz.PositionReleaseBiz;
 import com.siti.enterprise.po.EnterpriseInfo;
 import com.siti.enterprise.po.PositionRelease;
+import com.siti.enterprise.vo.PositionReleaseVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,15 +19,17 @@ public class PositionReleaseCtrl {
     PositionReleaseBiz positionReleaseBiz;
 
     /**
-     * @Param  entId
-     * @Param  postId
-     * @Param  benefit
-     * @Param  salary
+     * @param  entId
+     * @param  postId
+     * @param  benefit
+     * @param  salary
+     * 
+     *
      * */
     @GetMapping("getPosition")
-    public ReturnResult getPositionRelease(Integer page, Integer pageSize, Integer entId,Integer postId,String benefit,Integer salary ){
+    public ReturnResult getPositionRelease(Integer page, Integer pageSize, Integer entId,Integer postId,String benefit,Integer salary ,String city,String content ){
         try {
-            PageInfo<PositionRelease> positionRelease = positionReleaseBiz.getPositionRelease(page, pageSize, entId,postId,benefit,salary);
+            PageInfo<PositionReleaseVo> positionRelease = positionReleaseBiz.getPositionRelease(page, pageSize, entId,postId,benefit,salary,city,content);
             return new ReturnResult(1,"查询成功",positionRelease);
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,7 +38,7 @@ public class PositionReleaseCtrl {
     }
 
     /**
-     * @Param  positionRelease
+     * @param  positionRelease
      * */
     @PostMapping("insert")
     public ReturnResult insert(@RequestBody PositionRelease positionRelease){
@@ -53,7 +56,7 @@ public class PositionReleaseCtrl {
     }
 
     /**
-     * @Param  positionRelease
+     * @param  positionRelease
      * */
     @PostMapping("update")
     public ReturnResult update(@RequestBody PositionRelease positionRelease){
@@ -72,14 +75,14 @@ public class PositionReleaseCtrl {
 
 
     /**
-     * @Param  positionReleases
+     * @param  positionReleases
      * */
     @PostMapping("insertList")
     public ReturnResult insert(@RequestBody List<PositionRelease> positionReleases){
         try {
-            List<PositionRelease> returnPositions = positionReleaseBiz.insertList(positionReleases);
-            if(returnPositions.size()>1){
-                return new ReturnResult(1,"添加成功",returnPositions);
+            int flag = positionReleaseBiz.insertList(positionReleases);
+            if(flag>=1){
+                return new ReturnResult(1,"添加成功");
             }else {
                 return new ReturnResult(0,"添加失败");
             }

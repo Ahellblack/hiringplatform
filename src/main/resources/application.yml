@@ -1,5 +1,5 @@
 server:
-  port: 19999
+  port: 9999
   context-path: /recruitassemble
 spring:
   thymeleaf:
@@ -11,8 +11,8 @@ spring:
         max-request-size: 100MB #
   profiles:
 #     active: dev   #  开发环境
-     active: test   #  测试环境
-#    active: prod  #  生产环境
+#     active: test   #  测试环境
+    active: prod  #  生产环境
 mybatis:
   configuration:
     mapUnderscoreToCamelCase: true
