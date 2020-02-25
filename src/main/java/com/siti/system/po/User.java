@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String password;
     private String sex;
     private String image;
-
+    private String userType;
 
     @Transient
     private String imageURL;
@@ -75,6 +75,7 @@ public class User implements Serializable {
         this.remark = user.getRemark();
         this.roles = user.getRoles();
         this.emailAddr = user.getEmailAddr();
+        this.userType = user.getUserType();
     }
 
 
@@ -297,5 +298,13 @@ public class User implements Serializable {
     public User setCanDelete(Integer canDelete) {
         this.canDelete = canDelete;
         return this;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

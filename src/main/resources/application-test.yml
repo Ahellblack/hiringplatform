@@ -1,6 +1,6 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: sitidev
     password: Cloud@002
     url: jdbc:mysql://47.100.200.255:3306/recruit_release?useUnicode=true&characterEncoding=utf8&useSSL=true&allowMultiQueries=true&serverTimezone=UTC
