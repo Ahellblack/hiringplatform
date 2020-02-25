@@ -15,3 +15,12 @@ filePath:
 logback:
   logHome: c:/audit/log/
   logName: hiringplatform
+
+msg:
+  accountSid: 8a216da855826478015599e3f66e1411
+  authToken: 71a6619327734d81957e60f2eeaa2626
+  appId: 8a216da86c8a1a54016c8dc74f1c0182
+  serberRip: app.cloopen.com
+  serverPort: 8883
+  msgModelId: 564132
+
