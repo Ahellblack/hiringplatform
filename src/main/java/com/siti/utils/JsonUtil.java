@@ -97,7 +97,7 @@ public class JsonUtil {
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             }
 
-            if (gson == null) {
+            /*if (gson == null) {
                 gson = new GsonBuilder()
                         .setLenient()
                         // 解决gson序列化时出现整型变为浮点型的问题
@@ -142,7 +142,7 @@ public class JsonUtil {
                                 }
                         )
                         .create();
-            }
+            }*/
         } catch (ClassNotFoundException | IOException e) {
             log.severe(e.getMessage());
             throw new RuntimeException(e);

@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.siti.config.CaffeineInit;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -11,6 +12,7 @@ import java.util.function.Function;
 /**
  * Created by dell on 2020/1/2.
  */
+@Service
 public class CaffeineUtil<K,V,T,R> {
 
     @Autowired
