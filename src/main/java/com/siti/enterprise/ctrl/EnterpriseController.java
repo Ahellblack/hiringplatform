@@ -50,6 +50,8 @@ public class EnterpriseController {
         }
     }
 
+    /**
+     * 企业注册*/
     @PostMapping("insert")
     public ReturnResult insert(@RequestBody EnterpriseInfo enterpriseInfo) {
         try {
