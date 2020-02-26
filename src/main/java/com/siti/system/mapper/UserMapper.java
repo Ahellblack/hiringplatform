@@ -44,11 +44,11 @@ public interface UserMapper extends Mapper<User> {
 
 
     /*根据用户名查询用户信息*/
-    @Select("select * from sys_user where user_name=#{userName}")
-    @Results(id = "progItem", value = {
+    @Select("select * from sys_user where phone_num=#{userName}")
+    /*@Results(id = "progItem", value = {
             @Result(property = "id", column = "id"),
             @Result(property = "roles", javaType = List.class, column = "id", many = @Many(select = "com.siti.system.mapper.RoleMapper.getByUserId")),
-    })
+    })*/
     User findUserByUserName(@Param("userName") String userName);
 
 

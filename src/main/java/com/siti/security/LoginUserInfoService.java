@@ -32,7 +32,7 @@ public class LoginUserInfoService implements UserDetailsService {
     @Resource
     private AuthMapper authMapper;
 
-    private final static String HEADPATHURL = "kindness";
+    private final static String HEADPATHURL = "recruit";
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -50,16 +50,16 @@ public class LoginUserInfoService implements UserDetailsService {
             } else {
                 user.setImageURL("");
             }
-            try {
-                List<Role> roles = roleMapper.getByUserId(user.getId());
+            try { // role不要了
+                /*List<Role> roles = roleMapper.getByUserId(user.getId());
 
                 List<Integer> roleIds = new ArrayList<Integer>();
                 for (Role role : roles) {
                     roleIds.add(role.getId());
                 }
                 List<Auth> menuList = authMapper.getMenu(roleIds);   //  获取角色的目录权限
-                List<Auth> authList = authMapper.getPermissionByRoleId(roleIds);    //  获取所有角色的所有授权信息
-                return new LoginUserInfo(user, menuList, authList);
+                List<Auth> authList = authMapper.getPermissionByRoleId(roleIds);    //  获取所有角色的所有授权信息*/
+                return new LoginUserInfo(user, null, null);
             } catch (Exception e) {
                 throw new UsernameNotFoundException("登录失败，用户角色异常！");
             }
