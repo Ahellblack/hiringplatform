@@ -10,6 +10,7 @@ import com.siti.system.biz.UserBiz;
 import com.siti.system.po.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -70,9 +71,14 @@ public class EnterpriseController {
                 }
                 return new ReturnResult(1, "添加成功",enterprise);
             } else if (enterprise == null) { // 修改user信息
+                Object savePoint = null;
                 try {
+                    //设置回滚点
+                   savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
                     userBiz.saveUser("UPDATE", user);
                 } catch (Exception e) {
+                    //报错时回滚
+                    TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                     logger.info(e.getMessage());
                 }
                 return new ReturnResult(1, "添加成功");
