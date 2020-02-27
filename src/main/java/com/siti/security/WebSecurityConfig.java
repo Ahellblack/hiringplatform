@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 , "/enterprise/**"
                 , "/release/**"
                 , "/position/**"
+                , "/msg/**"
         );
         super.configure(web);
     }

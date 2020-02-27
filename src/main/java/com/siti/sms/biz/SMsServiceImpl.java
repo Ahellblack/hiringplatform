@@ -5,6 +5,8 @@ import com.cloopen.rest.sdk.CCPRestSmsSDK;
 */
 
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.siti.config.YmlConfig;
 import com.siti.utils.CaffeineUtil;
 import org.springframework.stereotype.Service;
@@ -13,12 +15,22 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SMsServiceImpl {
 
     @Resource
+    CaffeineUtil caffeineUtil;
+
+    @Resource
     YmlConfig ymlConfig;
+
+    Cache<String, String> cache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterAccess(1, TimeUnit.MINUTES)
+            .maximumSize(10000)
+            .build();
 
     public boolean send(String phone) {//传入用户手机号
         //生成4位数随机验证码
@@ -42,7 +54,8 @@ public class SMsServiceImpl {
             }
             //发送成功后将验证码存入Redis,设置2分钟的过期时间
             String key = "code:" + phone;
-            CaffeineUtil.build().put(key, yzm);
+            cache.put(key,yzm);
+            /*CaffeineUtil.build().put(key, yzm);*/
             return true;
         } else {
             //异常返回输出错误码和错误信息
@@ -50,17 +63,15 @@ public class SMsServiceImpl {
             return false;
         }
     }
-
-
     /**
      * 取缓存数据做对比
      * */
     public boolean getCode(String phone, String code) {
-        if (phone != null && code != null) {
+         if (phone != null && code != null) {
             String key = "code:" + phone;
-            String CurrentYZM = (String)CaffeineUtil.build().get(key);
+            String CurrentYZM = (String)cache.getIfPresent(key);
 
-            if(CurrentYZM.equals(code)){
+            if(code.equals(CurrentYZM)){
                 return true;
             }else{
                 return false;
@@ -69,4 +80,15 @@ public class SMsServiceImpl {
             return false;
         }
     }
+
+    /*public static void main(String[] args) {
+
+        CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
+        restAPI.init("app.cloopen.com", "8883");// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
+        restAPI.setAccount("8a216da855826478015599e3f66e1411", "71a6619327734d81957e60f2eeaa2626");// 初始化主帐号和主帐号TOKEN
+        restAPI.setAppId("8a216da86c8a1a54016c8dc74f1c0182");// 初始化应用ID
+        HashMap<String, Object> result = restAPI.sendTemplateSMS("18360865166", "564567", new String[]{"你好", "内容填什么"});
+
+    }*/
+
 }
