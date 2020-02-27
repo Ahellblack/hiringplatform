@@ -12,10 +12,10 @@ import java.util.Map;
 public class PushMsg {
     private static String ACCOUNT_SID = "8a216da855826478015599e3f66e1411";
     private static String AUTH_TOKEN = "71a6619327734d81957e60f2eeaa2626";
-    private static String APPID = "8aaf0708624670f2016261f89d5b09be";
+    private static String APPID = "8a216da86df13579016df755a04704a1";
     private static String SERVERIP = "app.cloopen.com";
     private static String SERVERPORT = "8883";
-    private static String TEMPLATEID = "240720";//240720 // 100070
+    private static String TEMPLATEID = "564132";//240720 // 100070
 
 
     /**

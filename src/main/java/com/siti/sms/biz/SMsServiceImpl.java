@@ -81,14 +81,14 @@ public class SMsServiceImpl {
         }
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
 
         CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
         restAPI.init("app.cloopen.com", "8883");// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
         restAPI.setAccount("8a216da855826478015599e3f66e1411", "71a6619327734d81957e60f2eeaa2626");// 初始化主帐号和主帐号TOKEN
-        restAPI.setAppId("8a216da86c8a1a54016c8dc74f1c0182");// 初始化应用ID
-        HashMap<String, Object> result = restAPI.sendTemplateSMS("18360865166", "564567", new String[]{"你好", "内容填什么"});
+        restAPI.setAppId("8a216da86df13579016df755a04704a1");// 初始化应用ID
+        HashMap<String, Object> result = restAPI.sendTemplateSMS("18360865166", "564132", new String[]{"你好", "内容填什么"});
 
-    }*/
+    }
 
 }
