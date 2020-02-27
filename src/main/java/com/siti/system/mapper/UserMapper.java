@@ -73,6 +73,12 @@ public interface UserMapper extends Mapper<User> {
     List<User> findUserInfoByEmailAndUserName(@Param("email") String email, @Param("userName") String userName);
 
     /**
+     * 根据手机号查找用户信息
+     */
+    @Select("select * from sys_user where phone_num=#{phoneNum}")
+    List<User> findUserInfoByPhoneNum(@Param("phoneNum") String phoneNum);
+
+    /**
      * 根据用户名+邮箱地址，修改登录密码
      */
     @Update("update sys_user set password=#{pwd} where email_addr=#{email} and user_name=#{userName}")

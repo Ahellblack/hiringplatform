@@ -177,6 +177,13 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
         return dao.findUserInfoByEmailAndUserName(email, userName);
     }
 
+    /**
+     * 根据手机号查询用户信息
+     */
+    public List<User> findUserInfoByPhoneNum(String phoneNum) {
+        return dao.findUserInfoByPhoneNum(phoneNum);
+    }
+
 
     /**
      * 根据用户名+邮箱地址，修改登录密码
@@ -259,6 +266,78 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
                 e.printStackTrace();
             }
             userEmailCheckCode.remove(userName + emailAddr);
+            return new String(encryptResultStrname);
+        }
+    }
+
+    /**
+     * 发送手机验证码，找回密码
+     */
+    public void getPhoneCheckCode(String phoneNum) {
+        if (phoneNum == null) {
+            throw new MyException("参数错误，请核实！");
+        }
+        boolean macth = PatternMatch.matchPhone(phoneNum);
+        if (!macth) {
+            throw new MyException("手机号格式错误，请核实！");
+        }
+        int size = findUserInfoByPhoneNum(phoneNum).size();
+        if (size != 1) {
+            throw new MyException("信息不匹配，请核实！");
+        }
+        String info = (String) userEmailCheckCode.get(phoneNum);
+        String[] code = info != null ? info.split(",") : null;
+        long current = System.currentTimeMillis();
+        if (code != null && Math.abs(current - Long.parseLong(code[1])) <= 1000 * 60) {
+            throw new MyException("验证码获取过于频繁，请稍后操作！");
+        }
+        String checkCode = String.valueOf((int) (Math.random() * 900000) + 100000);
+        // 发送手机验证码
+        String subject = "密码找回";
+        int ret = MailUtil.sendMailBySSL(subject, "", phoneNum);
+        if (ret == 0) {
+            userEmailCheckCode.put(phoneNum, checkCode + "," + System.currentTimeMillis());
+        } else {
+            throw new MyException("服务器错误，无法发送验证码！");
+        }
+    }
+
+    /**
+     * 手机号验证码验证
+     *
+     * @param phoneNum
+     * @param checkCode
+     * @return
+     */
+    public String checkInLawByPhone(String phoneNum, String checkCode) {
+        if (phoneNum == null || checkCode == null) {
+            throw new MyException("参数错误，请核实！");
+        }
+        boolean match = PatternMatch.matchPhone(phoneNum);
+        if (!match) {
+            throw new MyException("手机号格式错误，请核实！");
+        }
+        String info = (String) userEmailCheckCode.get(phoneNum);
+        String[] code = info != null ? info.split(",") : null;
+        if (code == null) {
+            throw new MyException("验证码过期，请重新获取！");
+        }
+        String codeInfo = code[0];
+        Long codeTime = Long.parseLong(code[1]);
+        Long current = System.currentTimeMillis();
+        if (Math.abs(current - codeTime) > 1000 * 60 * 30) {
+            throw new MyException("验证码过期，请重新获取！");
+        }
+        if (!codeInfo.equals(checkCode)) {
+            throw new MyException("验证码错误，请重新获取！");
+        } else {
+            byte[] encryptResultStrname = new byte[0];
+            try {
+                encryptResultStrname = BackAES.encrypt(phoneNum + ",success," + codeTime, 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            userEmailCheckCode.remove(phoneNum);
             return new String(encryptResultStrname);
         }
     }
