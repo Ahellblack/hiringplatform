@@ -1,5 +1,7 @@
 package com.siti.enterprise.po;
 
+import javax.persistence.Transient;
+
 public class EnterpriseInfo {
 
   private long id;
@@ -23,6 +25,8 @@ public class EnterpriseInfo {
   private java.sql.Timestamp updateTime;
   private String remark;
 
+  @Transient
+  private String password;
 
   public long getId() {
     return id;
@@ -201,4 +205,11 @@ public class EnterpriseInfo {
     this.remark = remark;
   }
 
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }

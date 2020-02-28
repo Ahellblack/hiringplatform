@@ -51,6 +51,11 @@ public interface UserMapper extends Mapper<User> {
     })*/
     User findUserByUserName(@Param("userName") String userName);
 
+    /**
+     * 根据用户名和电话号码查询是否存在用户信息
+     */
+    @Select("<script> select count(id) from sys_user where user_name=#{userName} and phone_num=#{phoneNum}</script>")
+    Boolean userExist(@Param("userName") String userName, @Param("phoneNum") String phoneNum);
 
     /**
      * 根据用户名查询是否存在用户信息
@@ -65,6 +70,16 @@ public interface UserMapper extends Mapper<User> {
      */
     @Update("update sys_user set password=#{password},update_by=#{updateBy} where user_name=#{userName} ")
     void updateByUserName(User user);
+
+    /**
+     * 修改密码
+     *
+     * @param password
+     * @param updateBy
+     * @param id
+     */
+    @Update("update sys_user set password=#{password},update_by=#{updateBy} where id=#{id} ")
+    void updatePassword(@Param("password") String password, @Param("updateBy") Integer updateBy, @Param("id") Integer id);
 
     /**
      * 根据邮箱+用户名查找用户信息

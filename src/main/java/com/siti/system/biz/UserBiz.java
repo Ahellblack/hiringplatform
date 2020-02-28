@@ -78,7 +78,8 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
 //        Role role = roleMapper.selectByPrimaryKey(user.getRoleId());
 //        user.setRoleCode(role.getCode());
         if ("ADD".equals(operation)) {
-            user.setPassword(Md5Utils.encryptString("123456"));
+            user.setPassword(Md5Utils.encryptString(user.getPassword()));
+//            user.setPassword(Md5Utils.encryptString("123456"));
             user.setId(null);
             dao.insert(user);
         } else {
@@ -149,11 +150,11 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
      */
     public void modifyPwd(Integer userId, String logPwd, Integer updateBy) {
         String password = this.getEncryptPassword(logPwd);
-        User user = new User();
+        /*User user = new User();
         user.setId(userId);
         user.setPassword(password);
-        user.setUpdateBy(updateBy);
-        dao.updateByPrimaryKeySelective(user);
+        user.setUpdateBy(updateBy);*/
+        dao.updatePassword(password, updateBy, userId);
     }
 
     /**
@@ -397,6 +398,12 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
     }
 
 
+    /**
+     * 根据用户名和电话号码查询是否存在用户信息
+     */
+    public Boolean userExit(String userName, String phoneNum) {
+        return dao.userExist(userName, phoneNum);
+    }
 
 }
 

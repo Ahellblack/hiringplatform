@@ -2,6 +2,7 @@ package com.siti.system.ctrl;
 
 import com.github.pagehelper.PageInfo;
 import com.siti.common.BaseCtrl;
+import com.siti.common.ReturnResult;
 import com.siti.system.biz.UserBiz;
 import com.siti.system.po.User;
 import com.siti.utils.BASE64Util;
@@ -51,7 +52,7 @@ public class UserCtrl extends BaseCtrl<UserBiz, User> {
      * @param user
      * @return
      */
-    @PostMapping("saveUser")
+    /*@PostMapping("saveUser")
     public Map<String, Object> saveUser(@RequestBody User user) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
@@ -62,7 +63,7 @@ public class UserCtrl extends BaseCtrl<UserBiz, User> {
             map.put("message", e.getLocalizedMessage());
         }
         return map;
-    }
+    }*/
 
     /**
      * 更新用户
@@ -143,17 +144,17 @@ public class UserCtrl extends BaseCtrl<UserBiz, User> {
      * @return success：修改成功
      **/
     @PutMapping("pwd/{password}")
-    public String updateModifyPwd(@PathVariable String password) {
+    public ReturnResult updateModifyPwd(@PathVariable String password) {
         Integer id = LoginCtrl.getLoginUserInfo().getId();
         if (id == null || password == null || "".equals(password.trim())) {
-            return "fail";
+            return new ReturnResult(-1, "修改失败，参数缺失");
         }
         String logPwd = BASE64Util.decode(password);
         if (logPwd == null) {
-            return null;
+            return new ReturnResult(-1, "修改失败，密码不合规");
         }
         biz.modifyPwd(id, logPwd, id);
-        return "success";
+        return new ReturnResult(1, "修改成功");
     }
 
     /**

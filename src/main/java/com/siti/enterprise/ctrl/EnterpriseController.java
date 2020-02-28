@@ -52,13 +52,14 @@ public class EnterpriseController {
     }
 
     /**
-     * 企业注册*/
+     * 企业注册
+     */
     @PostMapping("insert")
     public ReturnResult insert(@RequestBody EnterpriseInfo enterpriseInfo) {
         try {
             EnterpriseInfo enterprise = enterpriseBiz.insert(enterpriseInfo);
             User user = new User();
-            if (enterprise != null) { // 新增user信息
+            if (enterprise != null && !userBiz.userExit(enterpriseInfo.getEntName(), enterpriseInfo.getTel())) { // 新增user信息
                 user.setUserName(enterpriseInfo.getEntName());
                 user.setRealName(enterpriseInfo.getContactName());
                 user.setRoleCode("manage");
@@ -66,26 +67,27 @@ public class EnterpriseController {
                 user.setPhoneNum(enterpriseInfo.getTel());
                 user.setUserType("manager");
                 user.setStatus(1);
+                user.setPassword(enterpriseInfo.getPassword());
                 try {
                     userBiz.saveUser("ADD", user);
                 } catch (Exception e) {
                     logger.info(e.getMessage());
                 }
-                return new ReturnResult(1, "添加成功",enterprise);
-            } else if (enterprise == null) { // 修改user信息
+                return new ReturnResult(1, "添加成功", enterprise);
+            } else if (enterprise == null && userBiz.userExit(enterpriseInfo.getEntName(), enterpriseInfo.getTel())) { // 修改user信息
                 Object savePoint = null;
                 try {
                     //设置回滚点
-                   savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
+                    savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
                     userBiz.saveUser("UPDATE", user);
                 } catch (Exception e) {
                     //报错时回滚
                     TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                     logger.info(e.getMessage());
                 }
-                return new ReturnResult(1, "添加成功");
+                return new ReturnResult(1, "修改成功");
             } else {
-                return new ReturnResult(0, "添加失败");
+                return new ReturnResult(1, "修改成功");
             }
         } catch (Exception e) {
             e.printStackTrace();

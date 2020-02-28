@@ -33,15 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/login/logout"
-                , "/user/getEmailCheckCode"
-                , "/user/checkInLaw"
-                , "/user/updatePwdByEmailCode"
-                , "/uploadFiles"
-                , "/sysInfo/getPCversion"
-                , "/sysInfo/getAPPversion"
-                , "/enterprise/**"
-                , "/release/**"
-                , "/position/**"
+                , "/enterprise/insert"
                 , "/msg/**"
         );
         super.configure(web);
